@@ -10,5 +10,6 @@
 				"ziglang.vscode-zig"
 			]
 		}
-	}
+	},
+	"postCreateCommand": "curl -o /home/codespace/.local/bin/zls 'https://zig.pm/zls/downloads/x86_64-linux/bin/zls' && chmod a+x '/home/codespace/.local/bin/zls'"
 }
