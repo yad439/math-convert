@@ -26,13 +26,11 @@ pub fn main() !void {
     const filename = filename_optional.?;
     const output_optional = args.next();
     const allocated_second = output_optional == null;
-    const output_name = if (output_optional == null) blk1: {
+    const output_name = output_optional orelse blk1: {
         const buf = try allocator.alloc(u8, filename.len + 4);
         @memcpy(buf[0..filename.len], filename);
         @memcpy(buf[filename.len..], ".out");
         break :blk1 buf;
-    } else blk2: {
-        break :blk2 output_optional.?;
     };
     defer if (allocated_second) {
         allocator.free(output_name);
