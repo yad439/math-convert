@@ -1,0 +1,24 @@
+name: Build
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup zig
+        uses: goto-bus-stop/setup-zig@v2
+      - name: Cache output files
+        uses: actions/cache@v3
+        with:
+          path: zig-cache
+          key: build-${{ runner.os }}-${{ hashFiles('build.zig') }}
+      - run: zig fmt --check src/*.zig
+      - name: Build Linux
+        run: zig build -Doptimize=ReleaseSmall
+      - name: Build Windows
+        run: zig build -Doptimize=ReleaseSmall -Dtarget=x86_64-windows
+      - name: Upload files
+        uses: actions/upload-artifact@v3
+        with:
+          name: converter
+          path: zig-out/bin/*
